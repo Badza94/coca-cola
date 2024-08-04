@@ -7,10 +7,12 @@ export default function Home() {
   const container = useRef<HTMLDivElement>(null);
   const stickyMask = useRef<HTMLDivElement>(null);
   const [isThresholdReached, setIsThresholdReached] = useState(false);
+  const [isThresholdReachedEnd, setIsThresholdReachedEnd] = useState(false);
 
   const initialMaskSize = 0.8;
   const targetMaskSize = 80;
-  const thresholdPercentage = 0.4; // 70% of targetMaskSize
+  const thresholdPercentage = 0.4; // 40% of targetMaskSize
+  const thresholdPercentageEnd = 0.8; // 80% of targetMaskSize
   const easing = 0.15;
   let easedScrollProgress = 0;
 
@@ -26,17 +28,18 @@ export default function Home() {
 
       stickyMask.current.style.webkitMaskSize = currentMaskSize * 100 + "%";
 
-      // Check if the threshold is reached
-      if (
-        currentMaskSize >= targetMaskSize * thresholdPercentage &&
-        !isThresholdReached
-      ) {
+      // Check if the start threshold is reached
+      if (currentMaskSize >= targetMaskSize * thresholdPercentage) {
         setIsThresholdReached(true);
-      } else if (
-        currentMaskSize < targetMaskSize * thresholdPercentage &&
-        isThresholdReached
-      ) {
+      } else {
         setIsThresholdReached(false);
+      }
+
+      // Check if the end threshold is reached (when scrolling back up)
+      if (currentMaskSize <= targetMaskSize * thresholdPercentageEnd) {
+        setIsThresholdReachedEnd(true);
+      } else {
+        setIsThresholdReachedEnd(false);
       }
     }
     requestAnimationFrame(animate);
@@ -54,6 +57,9 @@ export default function Home() {
     return 0;
   };
 
+  console.log("isThresholdReached:", isThresholdReached);
+  console.log("isThresholdReachedEnd:", isThresholdReachedEnd);
+
   return (
     <main className="main">
       <div ref={container} className="containerMask">
@@ -62,6 +68,7 @@ export default function Home() {
             <ModelViewer
               url="/3d/coca_cola_can/scene.gltf"
               animate={isThresholdReached}
+              animateEnd={isThresholdReachedEnd}
             />
           </div>
         </div>

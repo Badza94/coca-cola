@@ -6,42 +6,41 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { useSpring, animated, config } from "@react-spring/three";
 import { Mesh, Box3, Vector3 } from "three";
 
-// Define the props types
 interface ModelProps {
   url: string;
   animate: boolean;
+  animateEnd: boolean;
 }
 
-const Model: React.FC<ModelProps> = ({ url, animate }) => {
+const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
   const gltf = useLoader(GLTFLoader, url);
   const modelRef = useRef<Mesh>();
   const [active, setActive] = useState(false);
 
-  // Center and scale the model
   useEffect(() => {
     if (modelRef.current) {
       const box = new Box3().setFromObject(modelRef.current);
       const center = new Vector3();
       box.getCenter(center);
       modelRef.current.position.sub(center);
-
-      // Scale the model
-      // modelRef.current.scale.set(20, 20, 20);
     }
   }, [gltf]);
 
-  // Animation for sliding in from the right
-  const { x } = useSpring({
-    from: { x: 10 },
-    x: active ? 0 : 10,
-    config: config.slow,
+  const { x, rotationY } = useSpring({
+    from: { x: 10, rotationY: 0 },
+    to: async (next) => {
+      if (animate) {
+        await next({ x: 0, rotationY: 0, config: config.slow });
+      } else if (animateEnd) {
+        // Spin in the opposite direction and move back slowly
+        await next({ rotationY: -Math.PI, config: config.default });
+        await next({ x: 10, config: { duration: 9000 } });
+      }
+    },
   });
 
   useEffect(() => {
-    if (animate) {
-      console.log("ANIMATE");
-      setActive(true);
-    }
+    setActive(animate);
   }, [animate]);
 
   useFrame(() => {
@@ -51,26 +50,30 @@ const Model: React.FC<ModelProps> = ({ url, animate }) => {
   });
 
   return (
-    <animated.group position-x={x}>
+    <animated.group position-x={x} rotation-y={rotationY}>
       <primitive ref={modelRef} object={gltf.scene} />
     </animated.group>
   );
 };
 
-// Define the props types
 interface ModelViewerProps {
   url: string;
   animate: boolean;
+  animateEnd: boolean;
 }
 
-const ModelViewer: React.FC<ModelViewerProps> = ({ url, animate }) => {
+const ModelViewer: React.FC<ModelViewerProps> = ({
+  url,
+  animate,
+  animateEnd,
+}) => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <Canvas camera={{ position: [0, 0, 0.5], fov: 25 }} gl={{ alpha: true }}>
         <Suspense fallback={null}>
           <ambientLight intensity={1} />
           <directionalLight position={[2, 2, 2]} intensity={30} />
-          <Model url={url} animate={animate} />
+          <Model url={url} animate={animate} animateEnd={animateEnd} />
         </Suspense>
       </Canvas>
     </div>
