@@ -1,7 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
-import { delay } from "framer-motion/dom";
 import { useLenis } from "lenis/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const AnimatedSVG = () => {
   const controls = useAnimation();
