@@ -2,22 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.containerMask {
+  position: relative;
+  height: 300vh;
+  background-color: rgb(255, 255, 255);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.stickyMask {
+  height: 100vh;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-mask-image: url(../public/coca-cola.svg);
+  mask-image: url(../public/coca-cola.svg);
+  -webkit-mask-position: 52.25% center;
+  mask-position: 52.25% center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 80%;
+  mask-size: 80%;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.stickyMask .objectContainer {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }

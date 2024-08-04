@@ -9,9 +9,10 @@ import { Mesh, Box3, Vector3 } from "three";
 // Define the props types
 interface ModelProps {
   url: string;
+  animate: boolean;
 }
 
-const Model: React.FC<ModelProps> = ({ url }) => {
+const Model: React.FC<ModelProps> = ({ url, animate }) => {
   const gltf = useLoader(GLTFLoader, url);
   const modelRef = useRef<Mesh>();
   const [active, setActive] = useState(false);
@@ -33,13 +34,15 @@ const Model: React.FC<ModelProps> = ({ url }) => {
   const { x } = useSpring({
     from: { x: 10 },
     x: active ? 0 : 10,
-    config: config.molasses,
+    config: config.slow,
   });
 
   useEffect(() => {
-    const timer = setTimeout(() => setActive(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
+    if (animate) {
+      console.log("ANIMATE");
+      setActive(true);
+    }
+  }, [animate]);
 
   useFrame(() => {
     if (modelRef.current) {
@@ -57,16 +60,17 @@ const Model: React.FC<ModelProps> = ({ url }) => {
 // Define the props types
 interface ModelViewerProps {
   url: string;
+  animate: boolean;
 }
 
-const ModelViewer: React.FC<ModelViewerProps> = ({ url }) => {
+const ModelViewer: React.FC<ModelViewerProps> = ({ url, animate }) => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <Canvas camera={{ position: [0, 0, 0.5], fov: 25 }} gl={{ alpha: true }}>
         <Suspense fallback={null}>
           <ambientLight intensity={1} />
           <directionalLight position={[2, 2, 2]} intensity={30} />
-          <Model url={url} />
+          <Model url={url} animate={animate} />
         </Suspense>
       </Canvas>
     </div>
