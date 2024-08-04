@@ -1,33 +1,46 @@
+/* styles/global.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .containerMask {
-  position: relative;
-  height: 300vh;
-  background-color: rgb(255, 255, 255);
+  @apply relative h-[300vh] bg-white;
 }
 
-.stickyMask {
-  height: 100vh;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-mask-image: url(../public/coca-cola.svg);
-  mask-image: url(../public/coca-cola.svg);
-  -webkit-mask-position: 52.25% center;
-  mask-position: 52.25% center;
+.stickyMask,
+.stickyMask2 {
+  @apply h-[100vh] sticky top-0 flex items-center justify-center;
+  -webkit-mask-position: 50% center;
+  mask-position: 50% center;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-size: 80%;
   mask-size: 80%;
 }
+.stickyMask2 svg {
+  width: calc(100vw - 20.1%);
+  height: calc(100vw - 20.1%);
+}
+
+@media screen and (max-width: 763px) {
+  .stickyMask2 svg {
+    width: calc(100vw - 15%);
+    height: calc(100vw - 15%);
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .stickyMask2 svg {
+    width: calc(100vw - 13.2%);
+    height: calc(100vw - 13.2%);
+  }
+}
+
+.stickyMask {
+  -webkit-mask-image: url("../public/coca-cola.svg");
+  mask-image: url("../public/coca-cola.svg");
+}
 
 .stickyMask .objectContainer {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+  @apply h-full w-full object-cover;
 }
