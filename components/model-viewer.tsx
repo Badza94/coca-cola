@@ -4,7 +4,15 @@ import React, { Suspense, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { useSpring, animated, config } from "@react-spring/three";
-import { Mesh, Box3, Vector3 } from "three";
+import {
+  Mesh,
+  Box3,
+  Vector3,
+  TextureLoader,
+  MeshStandardMaterial,
+  MaterialLoader,
+  Object3D,
+} from "three";
 
 interface ModelProps {
   url: string;
@@ -15,7 +23,10 @@ interface ModelProps {
 const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
   const gltf = useLoader(GLTFLoader, url);
   const modelRef = useRef<Mesh>();
-  const [active, setActive] = useState(false);
+  const texture = useLoader(
+    TextureLoader,
+    "/3d/cokesoda/textures/CocaColaZero.jpeg"
+  );
 
   useEffect(() => {
     if (modelRef.current) {
@@ -23,8 +34,23 @@ const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
       const center = new Vector3();
       box.getCenter(center);
       modelRef.current.position.sub(center);
+
+      // Traverse the model's children to find and update materials
+      modelRef.current.traverse((child) => {
+        if ((child as Mesh).isMesh) {
+          const mesh = child as Mesh;
+          if (mesh.material instanceof MeshStandardMaterial) {
+            if (mesh.material.name === "Material.001") {
+              mesh.material.map = texture;
+              mesh.material.metalness = 0.85;
+              mesh.material.roughness = 0.25;
+              mesh.material.needsUpdate = true;
+            }
+          }
+        }
+      });
     }
-  }, [gltf]);
+  }, [gltf, texture]);
 
   const { x, rotationY } = useSpring({
     from: { x: 10, rotationY: 0 },
@@ -38,10 +64,6 @@ const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
       }
     },
   });
-
-  useEffect(() => {
-    setActive(animate);
-  }, [animate]);
 
   useFrame(() => {
     if (modelRef.current) {
@@ -71,7 +93,9 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     <div className="h-screen w-full flex items-center justify-center">
       <div className="h-1/2 2xl:h-screen w-full">
         <Canvas
-          camera={{ position: [0, 0, 0.5], fov: 25 }}
+          linear
+          flat
+          camera={{ position: [0, 0, 15], fov: 25 }}
           gl={{ alpha: true }}
         >
           <Suspense fallback={null}>

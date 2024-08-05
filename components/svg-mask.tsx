@@ -61,7 +61,7 @@ function SvgMask() {
       <div ref={stickyMask} className="stickyMask">
         <div className="objectContainer bg-[#e61a27]">
           <ModelViewer
-            url="/3d/coca_cola_can/scene.gltf"
+            url="/3d/cokesoda/scene.gltf"
             animate={isThresholdReached}
             animateEnd={isThresholdReachedEnd}
           />
