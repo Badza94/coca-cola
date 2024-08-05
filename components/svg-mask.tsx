@@ -47,7 +47,8 @@ function SvgMask() {
     if (stickyMask.current && container.current) {
       const scrollProgress =
         stickyMask.current.offsetTop /
-        (container.current.getBoundingClientRect().height - window.innerHeight);
+        (container.current.getBoundingClientRect().height -
+          window.innerHeight * 2);
       const delta = scrollProgress - easedScrollProgress;
       easedScrollProgress += delta * easing;
       return easedScrollProgress;

@@ -69,13 +69,18 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
 }) => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
-      <Canvas camera={{ position: [0, 0, 0.5], fov: 25 }} gl={{ alpha: true }}>
-        <Suspense fallback={null}>
-          <ambientLight intensity={1} />
-          <directionalLight position={[2, 2, 2]} intensity={30} />
-          <Model url={url} animate={animate} animateEnd={animateEnd} />
-        </Suspense>
-      </Canvas>
+      <div className="h-1/2 2xl:h-screen w-full">
+        <Canvas
+          camera={{ position: [0, 0, 0.5], fov: 25 }}
+          gl={{ alpha: true }}
+        >
+          <Suspense fallback={null}>
+            <ambientLight intensity={1} />
+            <directionalLight position={[2, 2, 2]} intensity={30} />
+            <Model url={url} animate={animate} animateEnd={animateEnd} />
+          </Suspense>
+        </Canvas>
+      </div>
     </div>
   );
 };
