@@ -1,4 +1,3 @@
-/* styles/global.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,28 +16,17 @@
   -webkit-mask-size: 80%;
   mask-size: 80%;
 }
+
 .stickyMask2 svg {
-  width: calc(100vw - 20.1%);
-  height: calc(100vw - 20.1%);
-}
-
-@media screen and (max-width: 763px) {
-  .stickyMask2 svg {
-    width: calc(100vw - 15%);
-    height: calc(100vw - 15%);
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .stickyMask2 svg {
-    width: calc(100vw - 13.2%);
-    height: calc(100vw - 13.2%);
-  }
+  width: 100%;
+  height: auto;
 }
 
 .stickyMask {
   -webkit-mask-image: url("../public/coca-cola.svg");
   mask-image: url("../public/coca-cola.svg");
+  background-size: contain; /* Ensure the SVG scales correctly */
+  background-position: center;
 }
 
 .stickyMask .objectContainer {
