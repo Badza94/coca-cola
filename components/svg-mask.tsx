@@ -1,11 +1,14 @@
 import { useRef, useEffect, useState } from "react";
 import ModelViewer from "./model-viewer";
+import { TEXTURE_URL } from "@/types/enum";
 
 function SvgMask() {
   const container = useRef<HTMLDivElement>(null);
   const stickyMask = useRef<HTMLDivElement>(null);
   const [isThresholdReached, setIsThresholdReached] = useState(false);
   const [isThresholdReachedEnd, setIsThresholdReachedEnd] = useState(false);
+  const [textureUrl, setTextureUrl] = useState(TEXTURE_URL.BASE);
+  const [bgColor, setBgColor] = useState("#e61a27");
 
   const initialMaskSize = 0.8;
   const targetMaskSize = 80;
@@ -56,14 +59,40 @@ function SvgMask() {
     return 0;
   };
 
+  useEffect(() => {
+    if (textureUrl === TEXTURE_URL.BASE) {
+      setBgColor("#e61a27");
+    } else if (textureUrl === TEXTURE_URL.ZERO) {
+      setBgColor("#110E0F");
+    } else if (textureUrl === TEXTURE_URL.LIGHT) {
+      setBgColor("");
+    }
+  }, [textureUrl]);
+
   return (
     <div ref={container} className="containerMask">
       <div ref={stickyMask} className="stickyMask">
-        <div className="objectContainer bg-[#e61a27]">
+        <div
+          className="objectContainer"
+          style={{
+            backgroundColor: bgColor,
+          }}
+        >
           <ModelViewer
             url="/3d/cokesoda/scene.gltf"
             animate={isThresholdReached}
             animateEnd={isThresholdReachedEnd}
+            textureUrl={textureUrl}
+          />
+        </div>
+        <div className="flex flex-col gap-4 absolute bottom-4 right-4">
+          <button
+            className="w-10 h-10 rounded-full bg-black border-2 border-white"
+            onClick={() => setTextureUrl(TEXTURE_URL.ZERO)}
+          />
+          <button
+            className="w-10 h-10 rounded-full bg-[#ae0001] border-2 border-white"
+            onClick={() => setTextureUrl(TEXTURE_URL.BASE)}
           />
         </div>
       </div>

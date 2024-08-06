@@ -10,23 +10,47 @@ import {
   Vector3,
   TextureLoader,
   MeshStandardMaterial,
-  MaterialLoader,
-  Object3D,
 } from "three";
+import { TEXTURE_URL } from "@/types/enum";
 
 interface ModelProps {
   url: string;
   animate: boolean;
   animateEnd: boolean;
+  textureUrl: string;
 }
 
-const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
+const Model: React.FC<ModelProps> = ({
+  url,
+  animate,
+  animateEnd,
+  textureUrl,
+}) => {
   const gltf = useLoader(GLTFLoader, url);
   const modelRef = useRef<Mesh>();
-  const texture = useLoader(
+  const textureBase = useLoader(
+    TextureLoader,
+    "/3d/cokesoda/textures/CocaCola_baseColor.jpeg"
+  );
+  const textureZero = useLoader(
     TextureLoader,
     "/3d/cokesoda/textures/CocaColaZero.jpeg"
   );
+  const textureLight = useLoader(
+    TextureLoader,
+    "/3d/cokesoda/textures/CocaColaLight.jpeg"
+  );
+
+  const [texture, setTexture] = useState(textureBase);
+  useEffect(() => {
+    if (textureUrl === TEXTURE_URL.BASE) {
+      setTexture(textureBase);
+    } else if (textureUrl === TEXTURE_URL.ZERO) {
+      setTexture(textureZero);
+    } else if (textureUrl === TEXTURE_URL.LIGHT) {
+      setTexture(textureLight);
+    }
+  }, [textureBase, textureLight, textureUrl, textureZero]);
 
   useEffect(() => {
     if (modelRef.current) {
@@ -42,8 +66,8 @@ const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
           if (mesh.material instanceof MeshStandardMaterial) {
             if (mesh.material.name === "Material.001") {
               mesh.material.map = texture;
-              mesh.material.metalness = 0.85;
-              mesh.material.roughness = 0.25;
+              mesh.material.metalness = 0.95;
+              mesh.material.roughness = 0.3;
               mesh.material.needsUpdate = true;
             }
           }
@@ -60,7 +84,7 @@ const Model: React.FC<ModelProps> = ({ url, animate, animateEnd }) => {
       } else if (animateEnd) {
         // Spin in the opposite direction and move back slowly
         await next({ rotationY: -Math.PI, config: config.default });
-        await next({ x: 10, config: { duration: 9000 } });
+        await next({ x: 10, config: { duration: 500 } });
       }
     },
   });
@@ -82,12 +106,14 @@ interface ModelViewerProps {
   url: string;
   animate: boolean;
   animateEnd: boolean;
+  textureUrl: string;
 }
 
 const ModelViewer: React.FC<ModelViewerProps> = ({
   url,
   animate,
   animateEnd,
+  textureUrl,
 }) => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
@@ -101,7 +127,12 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
           <Suspense fallback={null}>
             <ambientLight intensity={1} />
             <directionalLight position={[2, 2, 2]} intensity={30} />
-            <Model url={url} animate={animate} animateEnd={animateEnd} />
+            <Model
+              url={url}
+              animate={animate}
+              animateEnd={animateEnd}
+              textureUrl={textureUrl}
+            />
           </Suspense>
         </Canvas>
       </div>
