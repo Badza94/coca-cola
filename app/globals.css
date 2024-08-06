@@ -32,3 +32,39 @@
 .stickyMask .objectContainer {
   @apply h-full w-full object-cover;
 }
+
+.redNav {
+  @apply bg-[#e61a27] text-[#110E0F] hover:bg-[#110E0F] hover:border-white hover:text-white;
+}
+
+.blackNav {
+  @apply bg-[#110E0F] text-white hover:bg-white hover:border-white hover:text-black;
+}
+
+.lightNav {
+  @apply bg-[#f5f5f5] text-[#110E0F] border border-[#110E0F] hover:bg-[#e61a27] hover:border-white hover:text-white;
+}
+
+.blackBg {
+  @apply from-[#110E0F] to-[#0f110e] shadow-[#110E0F]/20;
+}
+
+.redBg {
+  @apply from-[#e61a27] to-[#e61a27] shadow-[#e61a27]/20;
+}
+
+.lightBg {
+  @apply from-[#f5f5f5] to-[#f5f5f5] shadow-[#f5f5f5]/20;
+}
+
+.blackNavLink {
+  @apply hover:text-[#110E0F];
+}
+
+.redNavLink {
+  @apply hover:text-[#e61a27];
+}
+
+.lightNavLink {
+  @apply hover:text-[#e61a27] text-[#110E0F];
+}

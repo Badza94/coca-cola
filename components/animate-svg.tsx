@@ -1,6 +1,7 @@
+"use client";
 import { motion, useAnimation } from "framer-motion";
 import { useLenis } from "lenis/react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const AnimatedSVG = () => {
   const controls = useAnimation();

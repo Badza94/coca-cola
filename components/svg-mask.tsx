@@ -1,14 +1,21 @@
+"use client";
 import { useRef, useEffect, useState } from "react";
 import ModelViewer from "./model-viewer";
-import { TEXTURE_URL } from "@/types/enum";
+import { COLORS, TEXTURE_URL } from "@/types/enum";
+import { motion } from "framer-motion";
 
-function SvgMask() {
+function SvgMask({
+  bgColor,
+  setBgColor,
+}: {
+  bgColor: string;
+  setBgColor: (color: COLORS) => void;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const stickyMask = useRef<HTMLDivElement>(null);
   const [isThresholdReached, setIsThresholdReached] = useState(false);
   const [isThresholdReachedEnd, setIsThresholdReachedEnd] = useState(false);
   const [textureUrl, setTextureUrl] = useState(TEXTURE_URL.BASE);
-  const [bgColor, setBgColor] = useState("#e61a27");
 
   const initialMaskSize = 0.8;
   const targetMaskSize = 80;
@@ -61,21 +68,24 @@ function SvgMask() {
 
   useEffect(() => {
     if (textureUrl === TEXTURE_URL.BASE) {
-      setBgColor("#e61a27");
+      setBgColor(COLORS.RED);
     } else if (textureUrl === TEXTURE_URL.ZERO) {
-      setBgColor("#110E0F");
+      setBgColor(COLORS.BLACK);
     } else if (textureUrl === TEXTURE_URL.LIGHT) {
-      setBgColor("");
+      setBgColor(COLORS.LIGHT);
     }
-  }, [textureUrl]);
+  }, [setBgColor, textureUrl]);
 
   return (
     <div ref={container} className="containerMask">
       <div ref={stickyMask} className="stickyMask">
-        <div
+        <motion.div
           className="objectContainer"
-          style={{
+          animate={{
             backgroundColor: bgColor,
+          }}
+          transition={{
+            duration: 0.5,
           }}
         >
           <ModelViewer
@@ -84,7 +94,7 @@ function SvgMask() {
             animateEnd={isThresholdReachedEnd}
             textureUrl={textureUrl}
           />
-        </div>
+        </motion.div>
         <div className="flex flex-col gap-4 absolute bottom-4 right-4">
           <button
             className="w-10 h-10 rounded-full bg-black border-2 border-white"
@@ -93,6 +103,10 @@ function SvgMask() {
           <button
             className="w-10 h-10 rounded-full bg-[#ae0001] border-2 border-white"
             onClick={() => setTextureUrl(TEXTURE_URL.BASE)}
+          />
+          <button
+            className="w-10 h-10 rounded-full bg-[#A7A9AC] border-2 border-white"
+            onClick={() => setTextureUrl(TEXTURE_URL.LIGHT)}
           />
         </div>
       </div>

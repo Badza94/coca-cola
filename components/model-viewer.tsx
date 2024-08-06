@@ -84,7 +84,7 @@ const Model: React.FC<ModelProps> = ({
       } else if (animateEnd) {
         // Spin in the opposite direction and move back slowly
         await next({ rotationY: -Math.PI, config: config.default });
-        await next({ x: 10, config: { duration: 500 } });
+        await next({ x: 20, config: { duration: 500 } });
       }
     },
   });
@@ -121,7 +121,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         <Canvas
           linear
           flat
-          camera={{ position: [0, 0, 15], fov: 25 }}
+          camera={{ position: [0, 0, 25], fov: 25 }}
           gl={{ alpha: true }}
         >
           <Suspense fallback={null}>
