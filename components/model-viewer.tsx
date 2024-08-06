@@ -116,7 +116,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
   textureUrl,
 }) => {
   return (
-    <div className="h-screen w-full flex items-center justify-center">
+    <div className="h-screen w-full flex items-center justify-center z-[1]">
       <div className="h-1/2 2xl:h-screen w-full">
         <Canvas
           linear

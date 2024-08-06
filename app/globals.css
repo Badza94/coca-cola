@@ -68,3 +68,46 @@
 .lightNavLink {
   @apply hover:text-[#e61a27] text-[#110E0F];
 }
+
+.content {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: max-content;
+  padding-bottom: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.content h1 {
+  font-size: 15vw;
+  line-height: 1em;
+  color: #110e0f;
+  position: absolute;
+  font-weight: 800;
+  text-align: center;
+}
+
+.content h1::after {
+  position: absolute;
+  inset: 0 0 0 0;
+  content: attr(data-content);
+  z-index: 99;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
+}
+
+.content svg {
+  position: absolute;
+  inset: 0 0 0 0;
+  margin: 0 auto;
+  stroke: #110e0f;
+  fill: none;
+  color: transparent;
+}

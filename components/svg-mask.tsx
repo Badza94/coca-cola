@@ -88,14 +88,36 @@ function SvgMask({
             duration: 0.5,
           }}
         >
-          <ModelViewer
-            url="/3d/cokesoda/scene.gltf"
-            animate={isThresholdReached}
-            animateEnd={isThresholdReachedEnd}
-            textureUrl={textureUrl}
-          />
+          <motion.div
+            className="content"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: isThresholdReached ? 1 : 0,
+              transition: { duration: 0.5 },
+            }}
+          >
+            <h1
+              style={{
+                color:
+                  bgColor === COLORS.RED
+                    ? COLORS.BLACK
+                    : bgColor === COLORS.BLACK
+                      ? COLORS.LIGHT
+                      : COLORS.RED,
+              }}
+              data-content="COCA COLA"
+            >
+              COCA COLA
+            </h1>
+            <ModelViewer
+              url="/3d/cokesoda/scene.gltf"
+              animate={isThresholdReached}
+              animateEnd={isThresholdReachedEnd}
+              textureUrl={textureUrl}
+            />
+          </motion.div>
         </motion.div>
-        <div className="flex flex-col gap-4 absolute bottom-4 right-4">
+        <div className="flex flex-col gap-4 absolute bottom-4 right-4 z-50">
           <button
             className="w-10 h-10 rounded-full bg-black border-2 border-white"
             onClick={() => setTextureUrl(TEXTURE_URL.ZERO)}
